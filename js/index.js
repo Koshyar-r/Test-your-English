@@ -7,7 +7,6 @@ const ExitButton = RuleBox.querySelector(".buttons .exit")
 const ContinueButton = RuleBox.querySelector(".buttons .continue")
 const QuizBox = document.querySelector(".quiz__box")
 const TimeCounter = QuizBox.querySelector(".timer .timer__sec")
-const TimeLine = QuizBox.querySelector("header .time__line")
 const CrimesOptionList = document.querySelector(".options")
 const FamilyOptionList = document.querySelector(".options")
 const VechileOptionList = document.querySelector(".options")
@@ -20,31 +19,42 @@ const ResultBox = document.querySelector(".result__box")
 const RestartQuiz = ResultBox.querySelector(".result__box__buttons .result__box__restart")
 const QuitQuiz = ResultBox.querySelector(".result__box__buttons .result__box__exit")
 
-RestartQuiz.onclick = () => {
-    ResultBox.classList.remove("activeResult")
-    ShowCrimeQuestions(QuestionCount)
-    CrimeQuestionCounter(QuestionNumb)
-    clearInterval(Counter)
-    StartTimer(TimeValue)
-    clearInterval(CounterLine)
-    StartTimerLine(WidthValue)
-    let QuestionCount = 0
-    let QuestionNumb = 1
-    let TimeValue = 30
-    let WidthValue = 0
-    let UserScore = 0
-}
-
-QuitQuiz.onclick = () => {
-    window.location.reload()
-}
-
 let QuestionCount = 0
 let QuestionNumb = 1
 let Counter
 let TimeValue = 30
-let WidthValue = 0
 let UserScore = 0
+let TickIcon = '<div class="icon tick"><i class="uil uil-check-circle"></i></div>'
+let CrossIcon = '<div class="icon tick"><i class="uil uil-times-circle"></i></div>'
+
+function ShowResultBox() {
+    const ScoreIcon = ResultBox.querySelector(".icon")
+    const ScoreText = ResultBox.querySelector(".score")
+    if(UserScore == 0) {
+        let ScoreTag = '<span>Bruh :/ , You got <p>' + UserScore + '</p> out of <p>' + CrimeQuestions.length + '</p> Study more. fr.</span>'
+        ScoreText.innerHTML = ScoreTag
+        let ScoreIconTag = '<i class="uil uil-annoyed-alt"></i>'
+        ScoreIcon.innerHTML = ScoreIconTag
+    }
+    else if(UserScore == 1 || UserScore == 2) {
+        let ScoreTag = '<span>You can do better! , You got <p>' + UserScore + '</p> out of <p>' + CrimeQuestions.length + '</p> .</span>'
+        ScoreText.innerHTML = ScoreTag
+        let ScoreIconTag = '<i class="uil uil-annoyed"></i>'
+        ScoreIcon.innerHTML = ScoreIconTag
+    }
+    else if(UserScore == 3 || UserScore == 4) {
+        let ScoreTag = '<span>Good job! , You got <p>' + UserScore + '</p> out of <p>' + CrimeQuestions.length + '</p> .</span>'
+        ScoreText.innerHTML = ScoreTag
+        let ScoreIconTag = '<i class="uil uil-smile-squint-wink"></i>'
+        ScoreIcon.innerHTML = ScoreIconTag
+    }
+    else if (UserScore == 5) {
+        let ScoreTag = '<span>Booyah! , You got <p>' + UserScore + '</p> out of <p>' + CrimeQuestions.length + '</p> .</span>'
+        ScoreText.innerHTML = ScoreTag
+        let ScoreIconTag = '<i class="uil uil-grin"></i>'
+        ScoreIcon.innerHTML = ScoreIconTag
+    }
+}
 
 function StartTimer(Time) {
     Counter = setInterval(Timer, 1000)
@@ -59,7 +69,7 @@ function StartTimer(Time) {
             clearInterval(Counter)
             TimeCounter.textContent = "00"
 
-            /*let CrimeCorrectAnswer = CrimeQuestions[QuestionCount].answer
+            let CrimeCorrectAnswer = CrimeQuestions[QuestionCount].answer
             let CrimeAllOptions = CrimesOptionList.children.length
 
             for (let i = 0; i < CrimeAllOptions; i++) {
@@ -70,23 +80,11 @@ function StartTimer(Time) {
             }
             for (let i = 0; i < CrimeAllOptions; i++) {
                 CrimesOptionList.children[i].classList.add("disabled")
-            }*/
-            
+            }
+            CrimeNextButton.style.display = "block"
         }
     }
 }
-
-function StartTimerLine(Time) {
-    CounterLine = setInterval(Timer, 57)
-    function Timer() {
-        Time += 1
-        TimeLine.style.width = Time + "px"
-        if(Time > 555) {
-            clearInterval(CounterLine)
-        }
-    }
-}
-
 
 CrimesButton.onclick = () => {
     RuleBox.classList.add("activeRule")
@@ -99,8 +97,6 @@ CrimesButton.onclick = () => {
         CrimeQuestionCounter(QuestionNumb)
         clearInterval(Counter)
         StartTimer(TimeValue)
-        clearInterval(CounterLine)
-        StartTimerLine(WidthValue)
         CrimeNextButton.style.display = "none"
     } else {
         console.log("Questions Completed!!")
@@ -130,12 +126,8 @@ function ShowCrimeQuestions(index) {
     }
 }
 
-let TickIcon = '<div class="icon tick"><i class="uil uil-check-circle"></i></div>'
-let CrossIcon = '<div class="icon tick"><i class="uil uil-times-circle"></i></div>'
-
 function CrimeOptionSelected(answer) {
     clearInterval(Counter)
-    clearInterval(CounterLine)
     let CrimeUserAnswer = answer.textContent
     let CrimeCorrectAnswer = CrimeQuestions[QuestionCount].answer
     let CrimeAllOptions = CrimesOptionList.children.length
@@ -167,26 +159,7 @@ function CrimeShowResultBox() {
     RuleBox.classList.remove("activeRule")
     QuizBox.classList.remove("activeQuiz")
     ResultBox.classList.add("activeResult")
-    const ScoreIcon = ResultBox.querySelector(".icon")
-    const ScoreText = ResultBox.querySelector(".score")
-    if(UserScore == 0) {
-        let ScoreTag = '<span>Bruh :/ , You got <p>' + UserScore + '</p> out of <p>' + CrimeQuestions.length + '</p> Study more. fr.</span>'
-        ScoreText.innerHTML = ScoreTag
-        let ScoreIconTag = '<i class="uil uil-confused"></i>'
-        ScoreIcon.innerHTML = ScoreIconTag
-    }
-    else if(UserScore > 1 || UserScore == 1) {
-        let ScoreTag = '<span>You can do better! , You got <p>' + UserScore + '</p> out of <p>' + CrimeQuestions.length + '</p> .</span>'
-        ScoreText.innerHTML = ScoreTag
-        let ScoreIconTag = '<i class="uil uil-smile-squint-wink"></i>'
-        ScoreIcon.innerHTML = ScoreIconTag
-    }
-    else if(UserScore > 3 || UserScore == 3) {
-        let ScoreTag = '<span>Good job! , You got <p>' + UserScore + '</p> out of <p>' + CrimeQuestions.length + '</p> .</span>'
-        ScoreText.innerHTML = ScoreTag
-        let ScoreIconTag = '<i class="uil uil-smile-squint-wink"></i>'
-        ScoreIcon.innerHTML = ScoreIconTag
-    }
+    ShowResultBox()
 }
 
 FamilyButton.onclick = () => {
@@ -199,14 +172,42 @@ FamilyButton.onclick = () => {
         QuestionNumb++
         FamilyQuestionCounter(QuestionNumb)
         clearInterval(Counter)
-        StartTimer(TimeValue)
-        clearInterval(CounterLine)
-        StartTimerLine(WidthValue)
+        FamilyStartTimer(TimeValue)
         FamilyNextButton.style.display = "none"
     } else {
         console.log("Questions Completed!!!")
         FamilyShowResultBox()
     }   
+    }
+}
+
+function FamilyStartTimer(Time) {
+    Counter = setInterval(Timer, 1000)
+    function Timer() {
+        TimeCounter.textContent = Time
+        Time--
+        if(Time < 9) {
+            let AddZero = TimeCounter.textContent
+            TimeCounter.textContent = "0" + AddZero
+        }
+        if(Time < 0) {
+            clearInterval(Counter)
+            TimeCounter.textContent = "00"
+
+            let FamilyCorrectAnswer = FamilyQuestions[QuestionCount].answer
+            let FamilyAllOptions = FamilyOptionList.children.length
+
+            for (let i = 0; i < FamilyAllOptions; i++) {
+                if(FamilyOptionList.children[i].textContent == FamilyCorrectAnswer) {
+                    FamilyOptionList.children[i].setAttribute("class", "option correct")
+                    FamilyOptionList.children[i].insertAdjacentHTML("BeforeEnd", TickIcon)
+                }
+            }
+            for (let i = 0; i < FamilyAllOptions; i++) {
+                FamilyOptionList.children[i].classList.add("disabled")
+            }
+            FamilyNextButton.style.display = "block"
+        }
     }
 }
 
@@ -233,7 +234,6 @@ function ShowFamilyQuestions(index) {
 
 function FamilyOptionSelected(answer) {
     clearInterval(Counter)
-    clearInterval(CounterLine)
     let FamilyUserAnswer = answer.textContent
     let FamilyCorrectAnswer = FamilyQuestions[QuestionCount].answer
     let FamilyAllOptions = FamilyOptionList.children.length
@@ -264,23 +264,7 @@ function FamilyShowResultBox() {
     RuleBox.classList.remove("activeRule")
     QuizBox.classList.remove("activeQuiz")
     ResultBox.classList.add("activeResult")
-    const ScoreText = ResultBox.querySelector(".score")
-    if(UserScore > 0) {
-        let ScoreTag = '<span>Bruh <i class="uil uil-confused"></i>, You got <p>' + UserScore + '</p> out of <p>' + FamilyQuestions.length + '</p> Study more.</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
-    else if(UserScore > 2) {
-        let ScoreTag = '<span>Good but you can do better <i class="uil uil-smile-squint-wink"></i>, You got <p>' + UserScore + '</p> out of <p>' + FamilyQuestions.length + '</p> .</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
-    else if(UserScore > 3) {
-        let ScoreTag = '<span>Nice! <i class="uil uil-smile"></i>, You got <p>' + UserScore + '</p> out of <p>' + FamilyQuestions.length + '</p> Questions.</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
-    else if (UserScore == 5) {
-        let ScoreTag = '<span>Booyah!! <i class="uil uil-grin-tongue-wink"></i>, You got <p>' + UserScore + '</p> out of <p>' + FamilyQuestions.length + '</p> Questions.</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
+    ShowResultBox()
 }
 
 VechilesButton.onclick = () => {
@@ -294,14 +278,42 @@ VechilesButton.onclick = () => {
             QuestionNumb++
             VechileQuestionCounter(QuestionNumb)
             clearInterval(Counter)
-            StartTimer(TimeValue)
-            clearInterval(CounterLine)
-            StartTimerLine(WidthValue)
+            VechileStartTimer(TimeValue)
             VechileNextButton.style.display = "none"
         } else {
             console.log("Questions Completed!!!")
             VechileShowResultBox()
         }   
+    }
+}
+
+function VechileStartTimer(Time) {
+    Counter = setInterval(Timer, 1000)
+    function Timer() {
+        TimeCounter.textContent = Time
+        Time--
+        if(Time < 9) {
+            let AddZero = TimeCounter.textContent
+            TimeCounter.textContent = "0" + AddZero
+        }
+        if(Time < 0) {
+            clearInterval(Counter)
+            TimeCounter.textContent = "00"
+
+            let VechileCorrectAnswer = VechileQuestions[QuestionCount].answer
+            let VechileAllOptions = VechileOptionList.children.length
+
+            for (let i = 0; i < VechileAllOptions; i++) {
+                if(VechileOptionList.children[i].textContent == VechileCorrectAnswer) {
+                    VechileOptionList.children[i].setAttribute("class", "option correct")
+                    VechileOptionList.children[i].insertAdjacentHTML("BeforeEnd", TickIcon)
+                }
+            }
+            for (let i = 0; i < VechileAllOptions; i++) {
+                VechileOptionList.children[i].classList.add("disabled")
+            }
+            VechileNextButton.style.display = "block"
+        }
     }
 }
 
@@ -328,7 +340,6 @@ function ShowVechileQuestions(index) {
 
 function VechileOptionSelected(answer) {
     clearInterval(Counter)
-    clearInterval(CounterLine)
     let VechileUserAnswer = answer.textContent
     let VechileCorrectAnswer = VechileQuestions[QuestionCount].answer
     let VechileAllOptions = VechileOptionList.children.length
@@ -359,23 +370,7 @@ function VechileShowResultBox() {
     RuleBox.classList.remove("activeRule")
     QuizBox.classList.remove("activeQuiz")
     ResultBox.classList.add("activeResult")
-    const ScoreText = ResultBox.querySelector(".score")
-    if(UserScore > 0) {
-        let ScoreTag = '<span>Bruh <i class="uil uil-confused"></i>, You got <p>' + UserScore + '</p> out of <p>' + VechileQuestions.length + '</p> Study more.</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
-    else if(UserScore > 2) {
-        let ScoreTag = '<span>Good but you can do better <i class="uil uil-smile-squint-wink"></i>, You got <p>' + UserScore + '</p> out of <p>' + VechileQuestions.length + '</p> .</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
-    else if(UserScore > 3) {
-        let ScoreTag = '<span>Nice! <i class="uil uil-smile"></i>, You got <p>' + UserScore + '</p> out of <p>' + VechileQuestions.length + '</p> Questions.</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
-    else if (UserScore == 5) {
-        let ScoreTag = '<span>Booyah!! <i class="uil uil-grin-tongue-wink"></i>, You got <p>' + UserScore + '</p> out of <p>' + VechileQuestions.length + '</p> Questions.</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
+    ShowResultBox()
 }
 
 CountriesButton.onclick = () => {
@@ -389,14 +384,42 @@ CountriesButton.onclick = () => {
             QuestionNumb++
             CountryQuestionCounter(QuestionNumb)
             clearInterval(Counter)
-            StartTimer(TimeValue)
-            clearInterval(CounterLine)
-            StartTimerLine(WidthValue)
+            CountryStartTimer(TimeValue)
             CountryNextButton.style.display = "none"
         } else {
             console.log("Questions Completed!!!")
             CountryShowResultBox()
         }   
+    }
+}
+
+function CountryStartTimer(Time) {
+    Counter = setInterval(Timer, 1000)
+    function Timer() {
+        TimeCounter.textContent = Time
+        Time--
+        if(Time < 9) {
+            let AddZero = TimeCounter.textContent
+            TimeCounter.textContent = "0" + AddZero
+        }
+        if(Time < 0) {
+            clearInterval(Counter)
+            TimeCounter.textContent = "00"
+
+            let CountriesCorrectAnswer = CountryQuestions[QuestionCount].answer
+            let CountriesAllOptions = CountriesOptionList.children.length
+
+            for (let i = 0; i < CountriesAllOptions; i++) {
+                if(CountriesOptionList.children[i].textContent == CountriesCorrectAnswer) {
+                    CountriesOptionList.children[i].setAttribute("class", "option correct")
+                    CountriesOptionList.children[i].insertAdjacentHTML("BeforeEnd", TickIcon)
+                }
+            }
+            for (let i = 0; i < CountriesAllOptions; i++) {
+                CountriesOptionList.children[i].classList.add("disabled")
+            }
+            CountryNextButton.style.display = "block"
+        }
     }
 }
 
@@ -423,7 +446,6 @@ function ShowCountryQuestions(index) {
 
 function CountriesOptionSelected(answer) {
     clearInterval(Counter)
-    clearInterval(CounterLine)
     let CountriesUserAnswer = answer.textContent
     let CountriesCorrectAnswer = CountryQuestions[QuestionCount].answer
     let CountriesAllOptions = CountriesOptionList.children.length
@@ -454,23 +476,7 @@ function CountryShowResultBox() {
     RuleBox.classList.remove("activeRule")
     QuizBox.classList.remove("activeQuiz")
     ResultBox.classList.add("activeResult")
-    const ScoreText = ResultBox.querySelector(".score")
-    if(UserScore > 0) {
-        let ScoreTag = '<span>Bruh <i class="uil uil-confused"></i>, You got <p>' + UserScore + '</p> out of <p>' + CountryQuestions.length + '</p> Study more.</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
-    else if(UserScore > 2) {
-        let ScoreTag = '<span>Good but you can do better <i class="uil uil-smile-squint-wink"></i>, You got <p>' + UserScore + '</p> out of <p>' + CountryQuestions.length + '</p> .</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
-    else if(UserScore > 3) {
-        let ScoreTag = '<span>Nice! <i class="uil uil-smile"></i>, You got <p>' + UserScore + '</p> out of <p>' + CountryQuestions.length + '</p> Questions.</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
-    else {
-        let ScoreTag = '<span>Booyah!! <i class="uil uil-grin-tongue-wink"></i>, You got <p>' + UserScore + '</p> out of <p>' + CountryQuestions.length + '</p> Questions.</span>'
-        ScoreText.innerHTML = ScoreTag
-    }
+    ShowResultBox()
 }
 
 ExitButton.onclick = () => {
@@ -481,5 +487,12 @@ ContinueButton.onclick = () => {
     RuleBox.classList.remove("activeRule")
     QuizBox.classList.add("activeQuiz")
     StartTimer(TimeValue)
-    StartTimerLine(WidthValue)
+}
+
+RestartQuiz.onclick = () => {
+    window.location.reload()
+}
+
+QuitQuiz.onclick = () => {
+    window.location.reload()
 }
