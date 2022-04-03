@@ -674,6 +674,16 @@ footer .next__btn:hover {
         opacity: 0;
         pointer-events: none;
     }
+    .quiz__box header .title, .quiz__box header .timer .timer__sec {
+        font-size: 3.7vw;
+    }
+    .quiz__box header .timer {
+        width: 30vw;
+    }
+    .quiz__box header .timer .time__text {
+        font-size: 3.2vw;
+        text-align: center;
+    }
 }
 @media (min-width: 481px) and (max-width: 768px) {
     .start__page__text {
